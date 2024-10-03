@@ -3,7 +3,7 @@ name: Deploy en Preproducción
 on:
   push:
     branches:
-      - preproducción  # Aquí configuras que el flujo se ejecute al hacer push a la rama "preproducción"
+      - preproducción  # Este flujo se ejecuta cuando haces push a esta rama
 
 jobs:
   build:
@@ -11,12 +11,12 @@ jobs:
 
     steps:
     - name: Checkout del código
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3  
       with:
-        node-version: '14'
+        node-version: '16'  
 
     - name: Instalar dependencias
       run: npm install
