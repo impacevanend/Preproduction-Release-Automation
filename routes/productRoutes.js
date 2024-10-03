@@ -50,4 +50,17 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+
+// Obtener todos los productos junto con sus categorías
+router.get('/products', (req, res) => {
+    const sql = `
+    SELECT p.id, p.name, p.price, p.description, c.name as category
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.id`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.json(result);
+    });
+});
+
 module.exports = router;
