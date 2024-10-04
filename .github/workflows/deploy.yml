@@ -11,19 +11,19 @@ jobs:
 
     steps:
     - name: Checkout del código
-      uses: actions/checkout@v3  
+      uses: actions/checkout@v3
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v3  
+      uses: actions/setup-node@v3
       with:
-        node-version: '16'  
+        node-version: '16'
 
     - name: Instalar dependencias
       run: npm install
 
     - name: Actualizar versión y generar changelog
       run: npm run release
-    
+
     - name: Configurar identidad de Git
       run: |
         git config --local user.name "${{ secrets.GIT_USER_NAME }}"
@@ -31,11 +31,11 @@ jobs:
 
     - name: Hacer commit de los cambios de versionado y changelog
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/tu-usuario/tu-repositorio.git --follow-tags
+        git push origin preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
