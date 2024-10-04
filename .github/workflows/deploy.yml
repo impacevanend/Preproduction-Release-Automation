@@ -26,8 +26,8 @@ jobs:
     
     - name: Configurar identidad de Git
       run: |
-        git config --local user.name "GitHub Actions"
-        git config --local user.email "actions@github.com"
+        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
 
     - name: Hacer commit de los cambios de versionado y changelog
       run: |
