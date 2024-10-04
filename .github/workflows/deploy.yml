@@ -33,7 +33,7 @@ jobs:
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push origin preproduccion --follow-tags
+        git push https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/tu-usuario/tu-repositorio.git --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
