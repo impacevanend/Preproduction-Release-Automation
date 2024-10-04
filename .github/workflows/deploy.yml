@@ -3,7 +3,7 @@ name: Deploy en Preproducción
 on:
   push:
     branches:
-      - preproduccion 
+      - preproduccion
 
 jobs:
   build:
@@ -26,14 +26,14 @@ jobs:
     
     - name: Configurar identidad de Git
       run: |
-      git config --local user.name "GitHub Actions"
-      git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
 
     - name: Hacer commit de los cambios de versionado y changelog
       run: |
-      git add .
-      git commit -m "chore(release): actualización de versión automática"
-      git push origin preproduccion --follow-tags
+        git add .
+        git commit -m "chore(release): actualización de versión automática"
+        git push origin preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
