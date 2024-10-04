@@ -30,6 +30,8 @@ jobs:
         git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
 
     - name: Hacer commit de los cambios de versionado y changelog
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }} 
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
