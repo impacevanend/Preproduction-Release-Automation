@@ -11,29 +11,37 @@ jobs:
 
     steps:
     - name: Checkout del código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3  
       with:
         node-version: '16'
 
     - name: Instalar dependencias
       run: npm install
 
+    - name: Verificar valores secretos
+      run: |
+        echo "Usuario: ***"
+        echo "Email: ***"
+
     - name: Actualizar versión y generar changelog
       run: npm run release
 
-    # Omitir commit local y hacer push directo usando el token
+    - name: Configurar identidad de Git
+      run: |
+        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+
     - name: Push cambios con token de autenticación
       env:
         TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+        git remote set-url origin https://$TOKEN@github.com/impacevanend/Preproduction-Release-Automation.git
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push https://$TOKEN@github.com/tu_usuario/tu_repositorio.git HEAD:preproduccion --follow-tags
+        git push origin preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
@@ -41,3 +49,4 @@ jobs:
     - name: Desplegar en preproducción
       run: |
         echo "Desplegando aplicación en preproducción"
+        # Aquí iría el comando para desplegar en tu servidor de preproducción
