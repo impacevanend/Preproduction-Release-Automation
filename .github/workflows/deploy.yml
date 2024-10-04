@@ -1,7 +1,10 @@
-name: Deploy en Preproducción
+name: CI/CD Pipeline
 
 on:
   push:
+    branches:
+      - preproduccion
+  pull_request:
     branches:
       - preproduccion
 
@@ -11,43 +14,26 @@ jobs:
 
     steps:
     - name: Checkout del código
-      uses: actions/checkout@v3  
+      uses: actions/checkout@v2
 
     - name: Configurar Node.js
-      uses: actions/setup-node@v3  
+      uses: actions/setup-node@v2
       with:
-        node-version: '16'  
+        node-version: '16'
 
     - name: Instalar dependencias
       run: npm install
 
-    - name: Actualizar versión y generar changelog
-      run: npm run release
-
-    - name: Configurar identidad de Git
-      run: |
-        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
-        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
-
-    - name: Hacer commit de los cambios de versionado y changelog
-      run: |
-        git add .
-        git commit -m "chore(release): actualización de versión automática"
-        git push origin preproduccion --follow-tags
-      env:
-        TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      continue-on-error: true
 
     - name: Ejecutar pruebas
       run: npm test
 
     - name: Desplegar en preproducción
       run: |
-        echo "Desplegando aplicación en preproducción"
-        # Aquí iría el comando para desplegar en tu servidor de preproducción
+        echo "Desplegando en preproducción..."
+        # Comandos necesarios para el despliegue
 
     - name: Forzar despliegue si fallan los pasos previos
-      if: failure()
       run: |
         echo "Intentando forzar el despliegue."
         git push --force origin preproduccion --follow-tags
