@@ -21,30 +21,19 @@ jobs:
     - name: Instalar dependencias
       run: npm install
 
-    - name: Actualizar versión y generar changelog
-      run: npm run release
-    
     - name: Configurar identidad de Git
       run: |
-        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
-        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
+        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+
+    - name: Actualizar versión y generar changelog
+      run: npm run release
 
     - name: Hacer commit de los cambios de versionado y changelog
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-      env:
-        GIT_AUTHOR_NAME: ${{ secrets.GIT_USER_NAME }}
-        GIT_COMMITTER_NAME: ${{ secrets.GIT_USER_NAME }}
-        GIT_AUTHOR_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-        GIT_COMMITTER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-    - name: Hacer push de los cambios
-      run: |
-        git push https://$ACCESS_TOKEN@github.com/impacevanend/Preproduction-Release-Automation.git
-      env:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        git push https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/impacevanend/Preproduction-Release-Automation.git preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
@@ -52,4 +41,4 @@ jobs:
     - name: Desplegar en preproducción
       run: |
         echo "Desplegando aplicación en preproducción"
-        # Aquí iría el comando para desplegar en tu servidor de preproducción
+        # Comando para desplegar en tu servidor de preproducción
