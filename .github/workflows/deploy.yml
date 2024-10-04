@@ -5,7 +5,6 @@ on:
     branches:
       - preproduccion
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,13 +16,18 @@ jobs:
     - name: Configurar Node.js
       uses: actions/setup-node@v3  
       with:
-        node-version: '16'  
+        node-version: '16'
 
     - name: Instalar dependencias
       run: npm install
 
     - name: Actualizar versión y generar changelog
       run: npm run release
+    
+    - name: Configurar identidad de Git
+      run: |
+        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
 
     - name: Hacer commit de los cambios de versionado y changelog
       env:
@@ -31,7 +35,7 @@ jobs:
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/<tu-usuario>/<tu-repo>.git HEAD:preproduccion --follow-tags
+        git push https://${{ secrets.ACCESS_TOKEN }}@github.com/<tu-usuario>/<tu-repositorio>.git HEAD:preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
