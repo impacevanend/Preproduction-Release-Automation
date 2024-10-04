@@ -24,15 +24,15 @@ jobs:
     - name: Actualizar versión y generar changelog
       run: npm run release
 
-    - name: Hacer commit de los cambios de versionado y changelog
-      run: |
-        git add .
-        git commit -m "chore(release): actualización de versión automática"
-    
+    # Omitir commit local y hacer push directo usando el token
     - name: Push cambios con token de autenticación
       env:
         TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "chore(release): actualización de versión automática"
         git push https://$TOKEN@github.com/tu_usuario/tu_repositorio.git HEAD:preproduccion --follow-tags
 
     - name: Ejecutar pruebas
