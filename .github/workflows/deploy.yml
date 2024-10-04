@@ -21,22 +21,19 @@ jobs:
     - name: Instalar dependencias
       run: npm install
 
+    - name: Configurar identidad de Git
+      run: |
+        git config --global user.name "TuNombre"
+        git config --global user.email "tuemail@ejemplo.com"
+
     - name: Actualizar versión y generar changelog
       run: npm run release
     
-    - name: Configurar identidad de Git
-      run: |
-        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
-        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
-
     - name: Hacer commit de los cambios de versionado y changelog
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-
-    - name: Push cambios pendientes
-      run: |
-        git push origin preproduccion --force
+        git push https://$ACCESS_TOKEN@github.com/impacevanend/Preproduction-Release-Automation.git
 
     - name: Ejecutar pruebas
       run: npm test
