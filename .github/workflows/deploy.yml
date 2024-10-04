@@ -23,11 +23,6 @@ jobs:
 
     - name: Actualizar versión y generar changelog
       run: npm run release
-    
-    - name: Configurar identidad de Git
-      run: |
-        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
-        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
 
     - name: Hacer commit de los cambios de versionado y changelog
       env:
