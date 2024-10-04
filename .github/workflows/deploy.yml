@@ -21,11 +21,6 @@ jobs:
     - name: Instalar dependencias
       run: npm install
 
-    - name: Verificar valores secretos
-      run: |
-        echo "Usuario: ${{ secrets.GIT_USER_NAME }}"
-        echo "Email: ${{ secrets.GIT_USER_EMAIL }}"
-
     - name: Actualizar versión y generar changelog
       run: npm run release
     
@@ -38,7 +33,12 @@ jobs:
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push origin preproduccion --follow-tags
+    
+    - name: Push cambios con token de autenticación
+      env:
+        TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      run: |
+        git push https://$TOKEN@github.com/<TU_REPOSITORIO>.git HEAD:preproduccion --follow-tags
 
     - name: Ejecutar pruebas
       run: npm test
