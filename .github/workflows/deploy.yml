@@ -10,33 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v3
+    - name: Checkout del código
+      uses: actions/checkout@v3  
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3  
+      with:
+        node-version: '16'  
 
-      - name: Instalar dependencias
-        run: npm install
+    - name: Instalar dependencias
+      run: npm install
 
-      - name: Actualizar versión y generar changelog
-        run: npm run release
+    - name: Actualizar versión y generar changelog
+      run: npm run release
+    
+    - name: Configurar identidad de Git
+      run: |
+        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
 
-      - name: Configurar identidad de Git
-        run: |
-          git config --local user.name "${{ secrets.GIT_USER_NAME }}"
-          git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
+    - name: Hacer commit de los cambios de versionado y changelog
+      run: |
+        git add .
+        git commit -m "chore(release): actualización de versión automática"
+        git push origin preproduccion --follow-tags
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    
+    - name: Ejecutar pruebas
+      run: npm test
 
-      - name: Hacer commit de los cambios de versionado y changelog
-        run: |
-          git add .
-          git commit -m "chore(release): actualización de versión automática"
-          git push https://$ACCESS_TOKEN@github.com/impacevanend/Preproduction-Release-Automation.git preproduccion --follow-tags --force
-
-      - name: Ejecutar pruebas
-        run: npm test
-
-      - name: Desplegar en preproducción
-        run: echo "Desplegando aplicación en preproducción"
+    - name: Desplegar en preproducción
+      run: |
+        echo "Desplegando aplicación en preproducción"
