@@ -63,4 +63,14 @@ router.get('/products', (req, res) => {
     });
 });
 
+// Relacionar un producto con una categoría
+router.put('/:id/category', (req, res) => {
+    const { category_id } = req.body;
+    const sql = 'UPDATE products SET category_id = ? WHERE id = ?';
+    db.query(sql, [category_id, req.params.id], (err) => {
+        if (err) throw err;
+        res.json({ message: 'Producto actualizado con categoría' });
+    });
+});
+
 module.exports = router;
