@@ -21,19 +21,22 @@ jobs:
     - name: Instalar dependencias
       run: npm install
 
-    - name: Configurar identidad de Git
-      run: |
-        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
-        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
-
     - name: Actualizar versión y generar changelog
       run: npm run release
+    
+    - name: Configurar identidad de Git
+      run: |
+        git config --local user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --local user.email "${{ secrets.GIT_USER_EMAIL }}"
 
     - name: Hacer commit de los cambios de versionado y changelog
       run: |
         git add .
         git commit -m "chore(release): actualización de versión automática"
-        git push https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/impacevanend/Preproduction-Release-Automation.git preproduccion --follow-tags
+
+    - name: Push cambios pendientes
+      run: |
+        git push origin preproduccion --force
 
     - name: Ejecutar pruebas
       run: npm test
@@ -41,4 +44,4 @@ jobs:
     - name: Desplegar en preproducción
       run: |
         echo "Desplegando aplicación en preproducción"
-        # Comando para desplegar en tu servidor de preproducción
+        # Aquí iría el comando para desplegar en tu servidor de preproducción
